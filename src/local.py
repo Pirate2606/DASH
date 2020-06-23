@@ -13,11 +13,27 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    try:
+        ip = request.environ['HTTP_X_FORWARDED_FOR']  # if behind a proxy
+    except KeyError:
+        ip = request.environ['REMOTE_ADDR']
+
+    with open('ip.bin', 'w') as file:                 # saving the ip in the file
+        file.write(ip)
+
     return render_template("index.html")
 
 
 @app.route("/upload", methods=['POST'])
 def upload():
+    try:
+        ip = request.environ['HTTP_X_FORWARDED_FOR']  # if behind a proxy
+    except KeyError:
+        ip = request.environ['REMOTE_ADDR']
+
+    with open('ip.bin', 'w') as file:            # saving the ip in the file
+        file.write(ip)
+
     target = os.path.join(args.path)
     print(target)
 

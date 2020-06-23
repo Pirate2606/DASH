@@ -40,10 +40,12 @@ def local(port,path):
             ClientIP = output[10:]
         elif "127.0.0.1" in output:
             out = str(output).split(' ')
+            with open('ip.bin', 'r') as file:              # extracting the ip from the file
+                ip = file.read()
             if out[6] == '/':
-                process_display(0,0,"Someone Opened the page")
+                process_display(0,0,"Someone at {} has opened your page.".format(ip))
             elif out[-2] == '204':
-                process_display(0,0,"Upload Completed")
+                process_display(0,0,"File received from {}".format(ip))
 
 
 
@@ -110,5 +112,6 @@ if __name__ == "__main__":
         thread1.join()
         thread2.join()
     except:
+        os.remove('ip.bin')               # deleting the file which contains the ip
         print("\nYou're Great..!\nThanks for using :)")
         sys.exit(0)
